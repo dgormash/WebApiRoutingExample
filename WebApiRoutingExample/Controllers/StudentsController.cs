@@ -13,9 +13,9 @@ namespace WebApiRoutingExample.Controllers
     {
         static readonly List<Student> Students = new List<Student>()
         {
-            new Student {Id = 1, Name = "Гормаш Дмитрий"},
-            new Student {Id = 2, Name = "Елена Ивлева"},
-            new Student{Id = 3, Name = "Иван Пупкин"}
+            new Student {Id = 1, Name = "Jhon"},
+            new Student {Id = 2, Name = "Елена"},
+            new Student{Id = 3, Name = "Иван"}
         };
 
         [Route("")]
@@ -24,10 +24,25 @@ namespace WebApiRoutingExample.Controllers
             return Students;
         }
 
-        [Route("{id}")]
+        [Route("{id:int}", Name = "GetStudentById")]
         public Student Get(int id)
         {
-            return Students[id];
+            return Students.FirstOrDefault(s => s.Id == id);
+        }
+
+        [Route("")]
+        public HttpResponseMessage Post(Student student)
+        {
+            Students.Add(student);
+            var response = Request.CreateResponse(HttpStatusCode.Created);
+            response.Headers.Location = new Uri(Url.Link("GetStudentById", new {id = student.Id}));
+            return response;
+        } 
+
+        [Route("{name:alpha}")]
+        public Student Get(string name)
+        {
+            return Students.FirstOrDefault(s => s.Name == name);
         }
 
         [Route("{id}/courses")]

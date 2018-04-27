@@ -8,6 +8,7 @@ using WebApiRoutingExample.Models;
 
 namespace WebApiRoutingExample.Controllers
 {
+    [RoutePrefix("api/students")]
     public class StudentsController : ApiController
     {
         static readonly List<Student> Students = new List<Student>()
@@ -17,17 +18,19 @@ namespace WebApiRoutingExample.Controllers
             new Student{Id = 3, Name = "Иван Пупкин"}
         };
 
+        [Route("")]
         public IEnumerable<Student> Get()
         {
             return Students;
         }
 
+        [Route("{id}")]
         public Student Get(int id)
         {
             return Students[id];
         }
 
-        [Route("api/students/{id}/courses")]
+        [Route("{id}/courses")]
         public IEnumerable<string> GetStudentCourses(int id)
         {
             switch (id)
@@ -42,5 +45,18 @@ namespace WebApiRoutingExample.Controllers
                     return null;
             }
         }
+
+        [Route("~/api/teachers")]
+        public IEnumerable<Teacher> GetTeachers()
+        {
+            List<Teacher> teachers = new List<Teacher>
+            {
+                new Teacher {Id = 1, Name = "Rob"},
+                new Teacher {Id = 2, Name = "Mike"},
+                new Teacher {Id = 3, Name = "Mary"}
+            };
+
+            return teachers;
+        } 
     }
 }
